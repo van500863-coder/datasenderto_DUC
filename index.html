@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ទម្រង់ដាក់របាយការណ៍ការងារ</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Battambang', sans-serif; 
+            background-color: #f8fafc;
+            background-image: radial-gradient(at 40% 20%, hsla(228,100%,74%,0.15) 0px, transparent 50%),
+                              radial-gradient(at 80% 0%, hsla(189,100%,56%,0.15) 0px, transparent 50%),
+                              radial-gradient(at 0% 50%, hsla(355,100%,93%,0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+        
+        /* Smooth Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Custom Input Focus Shadow */
+        .input-modern:focus {
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Loading Spinner Animation */
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid #fff;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Fade in animation */
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
+
+    <div class="bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/50 w-full max-w-2xl p-6 sm:p-10 fade-in-up relative overflow-hidden">
+        
+        <!-- Decorative Shape -->
+        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 opacity-50 blur-2xl z-0"></div>
+
+        <div class="text-center mb-10 relative z-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 mb-4 shadow-sm border border-indigo-100">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12" />
+                </svg>
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 mb-3 tracking-tight">របាយការណ៍ការងារប្រចាំថ្ងៃ</h2>
+            <p class="text-gray-500 text-sm sm:text-base">សូមបំពេញព័ត៌មានខាងក្រោមយ៉ាងយកចិត្តទុកដាក់ ដើម្បីបញ្ជូនទៅកាន់ប្រធានផ្នែក</p>
+        </div>
+
+        <form id="reportForm" class="space-y-6 relative z-10">
+            
+            <!-- ឈ្មោះអ្នករាយការណ៍ -->
+            <div class="space-y-2">
+                <label class="flex items-center text-sm font-bold text-gray-700">
+                    <span class="bg-gray-100 text-gray-600 w-6 h-6 rounded-md flex items-center justify-center mr-2 text-xs">👤</span> 
+                    ឈ្មោះអ្នករាយការណ៍ <span class="text-red-500 ml-1">*</span>
+                </label>
+                <input type="text" id="userName" required
+                    class="input-modern w-full px-5 py-3.5 bg-gray-50/50 rounded-xl border border-gray-200 focus:bg-white focus:border-indigo-500 transition-all duration-200 outline-none text-gray-800 placeholder-gray-400 font-medium"
+                    placeholder="ឧទាហរណ៍៖ សុខ សាន្ត...">
+            </div>
+
+            <!-- លទ្ធផលការងារ -->
+            <div class="space-y-2">
+                <label class="flex items-center text-sm font-bold text-gray-700">
+                    <span class="bg-green-100 text-green-600 w-6 h-6 rounded-md flex items-center justify-center mr-2 text-xs">✅</span> 
+                    លទ្ធផលការងារដែលសម្រេចបាន <span class="text-red-500 ml-1">*</span>
+                </label>
+                <textarea id="workResults" rows="4" required
+                    class="input-modern w-full px-5 py-3.5 bg-gray-50/50 rounded-xl border border-gray-200 focus:bg-white focus:border-indigo-500 transition-all duration-200 outline-none resize-none text-gray-800 placeholder-gray-400"
+                    placeholder="- បញ្ចប់ការរចនាទំព័រដើម&#10;- ដោះស្រាយបញ្ហាកូដមិនដើរ..."></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- បញ្ហាប្រឈម -->
+                <div class="space-y-2">
+                    <label class="flex items-center text-sm font-bold text-gray-700">
+                        <span class="bg-red-100 text-red-600 w-6 h-6 rounded-md flex items-center justify-center mr-2 text-xs">⚠️</span> 
+                        បញ្ហាប្រឈម
+                    </label>
+                    <textarea id="challenges" rows="3" required
+                        class="input-modern w-full px-5 py-3.5 bg-gray-50/50 rounded-xl border border-gray-200 focus:bg-white focus:border-red-400 transition-all duration-200 outline-none resize-none text-gray-800 placeholder-gray-400"
+                        placeholder="តើជួបឧបសគ្គអ្វីខ្លះ?"></textarea>
+                </div>
+
+                <!-- សំណូមពរ -->
+                <div class="space-y-2">
+                    <label class="flex items-center text-sm font-bold text-gray-700">
+                        <span class="bg-yellow-100 text-yellow-600 w-6 h-6 rounded-md flex items-center justify-center mr-2 text-xs">💡</span> 
+                        សំណូមពរ
+                    </label>
+                    <textarea id="suggestions" rows="3" required
+                        class="input-modern w-full px-5 py-3.5 bg-gray-50/50 rounded-xl border border-gray-200 focus:bg-white focus:border-yellow-400 transition-all duration-200 outline-none resize-none text-gray-800 placeholder-gray-400"
+                        placeholder="តើត្រូវការជំនួយអ្វីបន្ថែម?"></textarea>
+                </div>
+            </div>
+
+            <!-- ប៊ូតុង Submit -->
+            <div class="pt-4">
+                <button type="submit" id="submitBtn"
+                    class="group w-full bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold py-4 px-6 rounded-xl shadow-[0_8px_20px_rgba(99,102,241,0.3)] hover:shadow-[0_10px_25px_rgba(99,102,241,0.4)] transform transition-all duration-300 hover:-translate-y-1 flex justify-center items-center active:translate-y-0">
+                    <span id="btnText" class="flex items-center text-[15px] tracking-wide">
+                        បញ្ជូនរបាយការណ៍
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </span>
+                    <span id="btnLoading" class="hidden flex items-center text-[15px] tracking-wide">
+                        <span class="spinner"></span> កំពុងបញ្ជូនទិន្នន័យ...
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ភ្ជាប់ Firebase (ប្រភេទ Module) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // ១. កុំភ្លេចយក Firebase Config របស់អ្នកមកដាក់ទីនេះ
+const firebaseConfig = {
+  apiKey: "AIzaSyAYyE2sQmriLrbfqo_OpIGuvbOJ7dhLgBU",
+  authDomain: "datareporttoduc.firebaseapp.com",
+  projectId: "datareporttoduc",
+  storageBucket: "datareporttoduc.firebasestorage.app",
+  messagingSenderId: "282912924436",
+  appId: "1:282912924436:web:5731e6b7dd4b2e90aa9801",
+};
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ២. ការកំណត់សម្រាប់ Telegram Bot
+​​​​        const TELEGRAM_BOT_TOKEN = "8165199040:AAETuk6iXhmTdCMqg41swbEKKmqlKP-rRZw"; 
+        const TELEGRAM_CHAT_ID = "-5212923316";
+
+        document.getElementById('reportForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+
+            // ប្តូរ UI ប៊ូតុងទៅជាកំពុង Loading
+            btn.disabled = true;
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+
+            const name = document.getElementById('userName').value;
+            const results = document.getElementById('workResults').value;
+            const challenges = document.getElementById('challenges').value;
+            const suggestions = document.getElementById('suggestions').value;
+
+            try {
+                // រក្សាទុកក្នុង Firebase
+                await addDoc(collection(db, "work_reports"), {
+                    name: name,
+                    work_results: results,
+                    challenges: challenges,
+                    suggestions: suggestions,
+                    createdAt: serverTimestamp()
+                });
+
+                // រៀបចំសារទៅ Telegram
+                const telegramMessage = `
+📝 <b>របាយការណ៍ការងារប្រចាំថ្ងៃ</b>
+━━━━━━━━━━━━━━━━━━━━
+👤 <b>អ្នករាយការណ៍:</b> ${name}
+
+✅ <b>លទ្ធផលការងារ:</b>
+${results}
+
+⚠️ <b>បញ្ហាប្រឈម:</b>
+${challenges}
+
+💡 <b>សំណូមពរ:</b>
+${suggestions}
+━━━━━━━━━━━━━━━━━━━━`;
+
+                // បញ្ជូនទៅ Telegram
+                const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+                await fetch(telegramUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: telegramMessage,
+                        parse_mode: 'HTML'
+                    })
+                });
+
+                // បង្ហាញសារជោគជ័យ
+                Swal.fire({
+                    icon: 'success',
+                    title: '<h3 class="font-bold text-2xl text-gray-800">ជោគជ័យ!</h3>',
+                    html: '<p class="text-gray-500">របាយការណ៍របស់អ្នកត្រូវបានបញ្ជូនរួចរាល់</p>',
+                    confirmButtonColor: '#4f46e5',
+                    confirmButtonText: 'យល់ព្រម',
+                    customClass: {
+                        popup: 'rounded-2xl',
+                        confirmButton: 'rounded-xl px-6 py-2'
+                    }
+                });
+
+                // Clear Form វិញ
+                document.getElementById('reportForm').reset();
+
+            } catch (error) {
+                console.error("Error: ", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'បរាជ័យ',
+                    text: 'សូមពិនិត្យមើលប្រព័ន្ធអ៊ីនធឺណិត ឬទាក់ទងអ្នកគ្រប់គ្រង!',
+                    confirmButtonColor: '#ef4444'
+                });
+            } finally {
+                // ប្រគល់ស្ថានភាពប៊ូតុងមកធម្មតាវិញ
+                btn.disabled = false;
+                btn.classList.remove('opacity-80', 'cursor-not-allowed');
+                btnText.classList.remove('hidden');
+                btnLoading.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
